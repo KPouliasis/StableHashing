@@ -12,35 +12,8 @@ let words = [
 ]
 
 
-let isBetween = (data, attribute, subTreeRoot) => isBetweenHelper(data, attribute, subTreeRoot, null, null)
-let findStoreLocation = (key, tree) => (isBetween(key, 'key', tree)[1] ? isBetween(key, 'key', tree)[1] : treeMin(tree)).key
+let findStoreLocation = require('./utils/utils')
 
-
-function treeMin(node) {
-  if (!node){
-    return null
-  }
-  if (!node.left){
-    return node
-  }
-
-  return treeMin(node.left)
-}
-function isBetweenHelper(data, attribute, subTreeRoot, previous, next){
-  if (data > subTreeRoot[attribute] && !subTreeRoot.right){
-    return [subTreeRoot, next]
-  }
-  if (data > subTreeRoot[attribute] && subTreeRoot.right){
-    return isBetweenHelper(data, attribute, subTreeRoot.right, subTreeRoot, next)
-  }
-  if (data < subTreeRoot[attribute] && !subTreeRoot.left){
-    return [previous, subTreeRoot]
-  }
-  if (data < subTreeRoot[attribute] && subTreeRoot.left){
-    return isBetweenHelper(data, attribute, subTreeRoot.left, previous, subTreeRoot)
-  }
-  if (data  === subTreeRoot[attribute]) return [subTreeRoot, next]
-}
 function StableHash(nodeNames = nodes, dataHash = md5hash, hashFunctions = [(node) => sha1(node).slice(0, 32) ]){
   let nodeBucketNames = [...nodeNames].reduce((acc, node) => acc.concat([dataHash, ...hashFunctions].map((funct) => funct(node).toString())), [])
   this.nodes = new Set(nodeBucketNames)
@@ -52,10 +25,7 @@ function StableHash(nodeNames = nodes, dataHash = md5hash, hashFunctions = [(nod
   this.dataInsertHashes = [this.dataFindHash, ...hashFunctions]
 }
 
-// StableHash.prototype._initializeNode(dataNode) = {
-//
-//
-// }
+
 StableHash.prototype._insertKeyVal = function(keyVal){
 
   this.dataInsertHashes.forEach((func, index) => {
@@ -83,7 +53,6 @@ StableHash.prototype.insertDataNode = function(dataNode) {
   let nextNodeData = this.hashTable[nextNode]
   console.log('REHASHING LOCALLY DATA,', nextNodeData)
   this.dataInsertHashes.forEach((func, index) => {
-    //  console.log('rehashing', func)
     Object.keys(nextNodeData).forEach(key => {
       if (nextNodeData[key] && nextNodeData[key][index]){
         let storeLocation = findStoreLocation(func(key), this.orderTree.root)
