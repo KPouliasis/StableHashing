@@ -26,4 +26,5 @@ function isBetweenHelper(data, attribute, subTreeRoot, previous, next){
   if (data  === subTreeRoot[attribute]) return [subTreeRoot, next]
 }
 
-export const findStoreLocation = (key, tree) => (isBetween(key, 'key', tree)[1] ? isBetween(key, 'key', tree)[1] : treeMin(tree)).key
+const findStoreLocation = (key, tree) => (isBetween(key, 'key', tree)[1] ? isBetween(key, 'key', tree)[1] : treeMin(tree)).key
+module.exports = findStoreLocation

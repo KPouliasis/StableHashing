@@ -5,6 +5,7 @@
   "repository": {},
   "license": "MIT",
   "dependencies": {
+    "assert": "^1.4.1",
     "blueimp-md5": "^2.7.0",
     "chance": "^1.0.6",
     "cityhash": "^0.0.5",
